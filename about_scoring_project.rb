@@ -29,8 +29,32 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
+def apply_bonus(val)
+  if val == 1
+    1000
+  else
+    100 * val
+  end
+end
+
 def score(dice)
-  # You need to write this method
+  points = 0
+  bonus_points = 0
+  scores = {1 => 100, 5 => 50}
+  dice.sort!
+
+  # Find triplet and add values
+  dice.each do |val|
+    die_occupied = dice.count(val)
+    if die_occupied > 2
+      bonus_points = apply_bonus(val) + (die_occupied - 3) * scores.fetch(val, 0)
+    else
+      points += 50 if val == 5
+      points += 100 if val == 1
+    end
+  end
+
+  points + bonus_points
 end
 
 class AboutScoringProject < Neo::Koan
